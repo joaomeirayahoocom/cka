@@ -1,0 +1,7 @@
+# Local .terraform directories
+**/.terraform/*
+/.terraform/*
+
+/tfstate_st_backend/consul.exe
+tfstate_st_backend/consul.exe
+env_variable_backend.sh
