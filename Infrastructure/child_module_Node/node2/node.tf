@@ -1,6 +1,6 @@
 # Create public IPs
 resource "azurerm_public_ip" "pip" {
-  name                = "${var.pip_name1}-${terraform.workspace}"
+  name                = "${var.pip_name}-${terraform.workspace}-${var.n2}"
   location            = var.rg_region
   resource_group_name = var.rg_name
   allocation_method   = "Dynamic"
@@ -8,7 +8,7 @@ resource "azurerm_public_ip" "pip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "nsg_cka" {
-  name                = "${var.nsg_name1}-${terraform.workspace}"
+  name                = "${var.nsg_name}-${terraform.workspace}-${var.n2}"
   location            = var.rg_region
   resource_group_name = var.rg_name
 
@@ -26,12 +26,12 @@ resource "azurerm_network_security_group" "nsg_cka" {
 }
 
 resource "azurerm_network_interface" "nic_cka" {
-  name                = "${var.nic_ip_name1}-${terraform.workspace}"
+  name                = "${var.nic_ip_name}-${terraform.workspace}-${var.n2}"
   location            = var.rg_region
   resource_group_name = var.rg_name
 
   ip_configuration {
-    name                          = "${var.nic_name1}-${terraform.workspace}"
+    name                          = "${var.nic_name}-${terraform.workspace}-${var.n2}"
     subnet_id                     = var.sub_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id 
@@ -65,7 +65,7 @@ resource "random_id" "random_id" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "vm_cka" {
-  name                  = "${var.vm_name}-${terraform.workspace}"
+  name                  = "${var.vm_name}-${terraform.workspace}-${var.n2}"
   location              = var.rg_region
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.nic_cka.id]
@@ -73,7 +73,7 @@ resource "azurerm_linux_virtual_machine" "vm_cka" {
 
 
 os_disk {
-    name                 = "${var.myOsDisk}-${terraform.workspace}"
+    name                 = "${var.myOsDisk}-${terraform.workspace}-${var.n2}"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
     disk_size_gb         = "40"
@@ -86,7 +86,7 @@ source_image_reference {
     version   = "latest"
 }
 
-  computer_name  = "${var.vm_name}-${terraform.workspace}"
+  computer_name  = "${var.vm_name}-${terraform.workspace}-${var.n2}"
   admin_username = var.user_name
 
 admin_ssh_key {

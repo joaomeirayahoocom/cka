@@ -18,10 +18,11 @@ variable "myOsDisk" {
   description = "os disk name"
   default     = "myOsDisk_cp1"
 }
+
 variable "vm_size" {
   type        = string
   description = "vm size"
-  default     = "Standard_DS2_v2"
+  default     = "Standard_DS1_v2"
 }
 
 variable "vm_name" {
@@ -60,16 +61,3 @@ variable "nic_ip_name"{
   default     = "nic_ip"
 }
 
-/*variable "acc_tier"{}
-#variable "cidr_blocks"{}
-#variable "subnet"{}
-#variable "rg_id"{}
-variable "vm_size"{}
-variable "user_name"{}
-variable "vnet_name"{}
-variable "pip_name"{}
-#variable "sub_name"{}
-variable "nic_name"{}
-variable "nsg_name"{}
-variable "vm_name"{}
-variable "nic_ip_name"{}*/
