@@ -1,5 +1,3 @@
-
-
 variable "subscription_id" {
   type        = string
   description = "subscription id"
@@ -11,5 +9,3 @@ variable "tenant_id" {
   description = "tenamt id"
   default     = "99346566-c77d-4104-b222-6e0915476b75"
 }
-
-

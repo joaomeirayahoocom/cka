@@ -1,6 +1,8 @@
+
 # Create public IPs
 resource "azurerm_public_ip" "pip" {
-  name                = "${var.pip_name}-${terraform.workspace}-${var.n2}"
+  
+  name                = "${var.pip_name}-${terraform.workspace}-${var.n1}"
   location            = var.rg_region
   resource_group_name = var.rg_name
   allocation_method   = "Dynamic"
@@ -8,7 +10,7 @@ resource "azurerm_public_ip" "pip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "nsg_cka" {
-  name                = "${var.nsg_name}-${terraform.workspace}-${var.n2}"
+  name                = "${var.nsg_name}-${terraform.workspace}-${var.n1}"
   location            = var.rg_region
   resource_group_name = var.rg_name
 
@@ -26,12 +28,12 @@ resource "azurerm_network_security_group" "nsg_cka" {
 }
 
 resource "azurerm_network_interface" "nic_cka" {
-  name                = "${var.nic_ip_name}-${terraform.workspace}-${var.n2}"
+  name                = "${var.nic_ip_name}-${terraform.workspace}-${var.n1}"
   location            = var.rg_region
   resource_group_name = var.rg_name
 
   ip_configuration {
-    name                          = "${var.nic_name}-${terraform.workspace}-${var.n2}"
+    name                          = "${var.nic_name}-${terraform.workspace}-${var.n1}"
     subnet_id                     = var.sub_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id 
@@ -44,28 +46,9 @@ resource "azurerm_network_interface_security_group_association" "nsg_cka" {
   network_security_group_id = azurerm_network_security_group.nsg_cka.id
 }
 
-# Generate random text for a unique storage account name
-resource "random_id" "random_id" {
-  keepers = {
-    # Generate a new ID only when a new resource group is defined
-    resource_group = var.rg_name
-  }
-
-  byte_length = 8
-}
-
-# Create storage account for boot diagnostics
-  resource "azurerm_storage_account" "st_cka" {
-  name                     = "st${random_id.random_id.hex}"
-  location                 = var.rg_region
-  resource_group_name      = var.rg_name
-  account_tier             = var.acc_tier
-  account_replication_type = "LRS"
-}
-
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "vm_cka" {
-  name                  = "${var.vm_name}-${terraform.workspace}-${var.n2}"
+  name                  = "${var.vm_name}-${terraform.workspace}-${var.n1}"
   location              = var.rg_region
   resource_group_name   = var.rg_name
   network_interface_ids = [azurerm_network_interface.nic_cka.id]
@@ -73,7 +56,7 @@ resource "azurerm_linux_virtual_machine" "vm_cka" {
 
 
 os_disk {
-    name                 = "${var.myOsDisk}-${terraform.workspace}-${var.n2}"
+    name                 = "${var.myOsDisk}-${terraform.workspace}-${var.n1}"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
     disk_size_gb         = "40"
@@ -86,7 +69,7 @@ source_image_reference {
     version   = "latest"
 }
 
-  computer_name  = "${var.vm_name}-${terraform.workspace}-${var.n2}"
+  computer_name  = "${var.vm_name}-${terraform.workspace}-${var.n1}"
   admin_username = var.user_name
 
 admin_ssh_key {
@@ -96,8 +79,9 @@ admin_ssh_key {
   }
 
   boot_diagnostics {
-    storage_account_uri = azurerm_storage_account.st_cka.primary_blob_endpoint
+    storage_account_uri = var.st_endpoint
   }
+
 }
 
 

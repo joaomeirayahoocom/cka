@@ -44,28 +44,6 @@ resource "azurerm_network_interface_security_group_association" "nsg_cka" {
   network_security_group_id = azurerm_network_security_group.nsg_cka.id
 }
 
-
-# Generate random text for a unique storage account name
-resource "random_id" "random_id" {
-
-  keepers = {
-      # Generate a new ID only when a new resource group is defined
-      resource_group = var.rg_name
-    }
-
-    byte_length = 8
-}
-
-# Create storage account for boot diagnostics
-resource "azurerm_storage_account" "st_cka" {
-  name                     = "st${random_id.random_id.hex}"
-  location                 = var.rg_region
-  resource_group_name      = var.rg_name
-  account_tier             = var.acc_tier
-  account_replication_type = "LRS"
-}
-
-
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "vm_cka" {
   name                  = "${var.vm_name}-${terraform.workspace}"
@@ -99,7 +77,7 @@ admin_ssh_key {
   }
 
   boot_diagnostics {
-    storage_account_uri = azurerm_storage_account.st_cka.primary_blob_endpoint
+    storage_account_uri = var.st_endpoint
   }
 }
 
@@ -113,7 +91,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "vm_data_disk_cka" {
 
 resource "azurerm_managed_disk" "managed_disk_cka" {
    
-  name                 = "DSK-data-${terraform.workspace}"
+  name                 = "DSK-data-cp1-${terraform.workspace}"
   disk_size_gb         = "100"
   resource_group_name  = "rg-${terraform.workspace}"
   location             = var.rg_region

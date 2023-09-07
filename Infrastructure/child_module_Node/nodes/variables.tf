@@ -3,12 +3,9 @@ variable "rg_name" {}
 variable "rg_region" {}
 variable "rg_id" {}
 variable "sub_id"{}
+variable "st_endpoint" {}
+variable "n1" {}
 
-variable "n1" {
-  type        = string
-  description = "env count"
-  default     = "01"
-}
 
 variable "user_name" {
   type        = string

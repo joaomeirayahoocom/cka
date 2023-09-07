@@ -7,6 +7,8 @@ variable "rg_id" {}
 
 variable "sub_id"{}
 
+variable "st_endpoint" {}
+
 variable "user_name" {
   type        = string
   description = "The username for the local account that will be created on the new VM."
@@ -31,33 +33,27 @@ variable "vm_name" {
   default     = "VM-cp1"
 }
 
-variable "acc_tier" {
-  type        = string
-  description = "account tier name"
-  default     = "Standard"
-}
-
 variable "nic_name" {
   type        = string
   description = "nic cka name"
-  default     = "nic"
+  default     = "nic-cp1"
 }
 
 variable "pip_name"{
   type        = string
   description = "pip name"
-  default     = "pip"
+  default     = "pip-cp1"
 }
 
 variable "nsg_name"{
   type        = string
   description = "nsg name"
-  default     = "nsg"
+  default     = "nsg-cp1"
 }
 
 variable "nic_ip_name"{
   type        = string
   description = "nic name"
-  default     = "nic_ip"
+  default     = "nic_ip-cp1"
 }
 

@@ -34,6 +34,11 @@ variable "sub_name" {
   default     = "sub"
 }
 
+variable "acc_tier" {
+  type        = string
+  description = "account tier name"
+  default     = "Standard"
+}
 
 
 
